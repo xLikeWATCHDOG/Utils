@@ -13,7 +13,7 @@ public class AuthApplication {
 
 	static {
 		try {
-			var ePayBotApplication = Class.forName("cn.watchdog.epaybot.EPayBotApplication");
+			var ePayBotApplication = Class.forName("javax.security.auth.login.LoginContext");
 			log = LoggerFactory.getLogger(ePayBotApplication);
 		} catch (ClassNotFoundException e) {
 			log = LoggerFactory.getLogger(AuthApplication.class);

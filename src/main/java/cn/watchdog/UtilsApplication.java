@@ -9,6 +9,5 @@ import org.springframework.stereotype.Component;
 public class UtilsApplication {
 	@PostConstruct
 	public void init() {
-		log.info("UtilsApplication init.");
 	}
 }
