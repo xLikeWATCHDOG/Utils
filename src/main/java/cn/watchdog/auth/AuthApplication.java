@@ -1,5 +1,6 @@
 package cn.watchdog.auth;
 
+import cn.watchdog.utils.CaffeineFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -16,7 +17,7 @@ public class AuthApplication {
 			var ePayBotApplication = Class.forName("javax.security.auth.login.LoginContext");
 			log = LoggerFactory.getLogger(ePayBotApplication);
 		} catch (ClassNotFoundException e) {
-			log = LoggerFactory.getLogger(AuthApplication.class);
+			log = LoggerFactory.getLogger(CaffeineFactory.class);
 		}
 	}
 

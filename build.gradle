@@ -5,11 +5,11 @@ plugins {
 }
 
 group = 'cn.watchdog'
-version = '0.0.4-SNAPSHOT'
+version = '0.0.5-SNAPSHOT'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(22)
     }
     withSourcesJar()
 }
@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-    api 'org.springframework.boot:spring-boot-starter:3.3.2'
-    api 'org.springframework.boot:spring-boot-starter-web:3.3.2'
+    api 'org.springframework.boot:spring-boot-starter:3.3.3'
+    api 'org.springframework.boot:spring-boot-starter-web:3.3.3'
 
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
@@ -34,7 +34,7 @@ dependencies {
 
     api 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
-    api 'org.apache.commons:commons-lang3:3.16.0'
+    api 'org.apache.commons:commons-lang3:3.17.0'
     api 'org.apache.commons:commons-pool2:2.12.0'
     api 'org.apache.directory.studio:org.apache.commons.codec:1.8'
 
@@ -47,6 +47,9 @@ dependencies {
     api 'com.github.kenglxn.QRGen:javase:3.0.1'
 
     api 'com.squareup.okhttp3:okhttp:4.11.0'
+
+    api 'org.telegram:telegrambots:6.9.7.1'
+    api 'cn.hutool:hutool-all:5.8.32'
 }
 
 
