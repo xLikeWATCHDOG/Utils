@@ -1,4 +1,4 @@
-package cn.watchdog.utils.gson;
+package cn.watchdog.core.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

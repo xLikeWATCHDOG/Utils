@@ -1,4 +1,4 @@
-package cn.watchdog.utils;
+package cn.watchdog.core;
 
 import lombok.Data;
 import lombok.Getter;

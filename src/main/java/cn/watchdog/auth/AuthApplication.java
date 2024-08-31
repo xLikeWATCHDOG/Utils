@@ -1,6 +1,6 @@
 package cn.watchdog.auth;
 
-import cn.watchdog.utils.CaffeineFactory;
+import cn.watchdog.core.CaffeineFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import org.slf4j.Logger;
