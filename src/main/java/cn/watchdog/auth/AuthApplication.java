@@ -2,6 +2,7 @@ package cn.watchdog.auth;
 
 import cn.watchdog.core.CaffeineFactory;
 import cn.watchdog.core.service.VariableReplacementService;
+import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -10,15 +11,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.SmartLifecycle;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Component
-public class AuthApplication implements SmartLifecycle {
+public class AuthApplication {
 	@Getter
 	private static Logger log;
 
@@ -32,9 +36,9 @@ public class AuthApplication implements SmartLifecycle {
 	}
 
 	private final OkHttpClient client = new OkHttpClient();
+	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	@Autowired
 	private ConfigurableApplicationContext context;
-	private boolean running = false;
 	@Autowired
 	private VariableReplacementService variableReplacementService;
 
@@ -78,23 +82,18 @@ public class AuthApplication implements SmartLifecycle {
 		return false;
 	}
 
-	@Override
-	public void start() {
+	@PostConstruct
+	public void init() {
+		// 延迟10秒后执行一次
+		scheduler.schedule(this::check, 10, TimeUnit.SECONDS);
+	}
+
+	@Scheduled(fixedRate = 1, timeUnit = TimeUnit.HOURS)
+	public void check() {
 		boolean license = checkLicense();
 		if (!license) {
 			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
 			SpringApplication.exit(context);
 		}
-		running = true;
-	}
-
-	@Override
-	public void stop() {
-		running = false;
-	}
-
-	@Override
-	public boolean isRunning() {
-		return running;
 	}
 }
