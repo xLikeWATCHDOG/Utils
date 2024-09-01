@@ -8,7 +8,8 @@ import okhttp3.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 
@@ -31,13 +32,13 @@ public class AuthApplication implements SmartLifecycle {
 	}
 
 	private final OkHttpClient client = new OkHttpClient();
+	@Autowired
+	private ConfigurableApplicationContext context;
 	private boolean running = false;
 	@Autowired
 	private VariableReplacementService variableReplacementService;
-	@Autowired
-	private ApplicationContext applicationContext;
 
-	public boolean checkLicense() {
+	private boolean checkLicense() {
 		String url = "https://raw.githubusercontent.com/xLikeWATCHDOG/resources/main/licenses/LICENSE-COMMON";
 		// 根目录下是否存在 LICENSE 文件
 		Path license = Paths.get("LICENSE");
@@ -82,7 +83,7 @@ public class AuthApplication implements SmartLifecycle {
 		boolean license = checkLicense();
 		if (!license) {
 			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
-			System.exit(0);
+			SpringApplication.exit(context);
 		}
 		running = true;
 	}
