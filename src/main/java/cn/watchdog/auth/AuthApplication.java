@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 
@@ -83,7 +82,7 @@ public class AuthApplication implements SmartLifecycle {
 		boolean license = checkLicense();
 		if (!license) {
 			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
-			((ConfigurableApplicationContext) applicationContext).close();
+			System.exit(0);
 		}
 		running = true;
 	}
