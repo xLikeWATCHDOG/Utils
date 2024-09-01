@@ -11,15 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class AuthApplication {
@@ -36,7 +32,6 @@ public class AuthApplication {
 	}
 
 	private final OkHttpClient client = new OkHttpClient();
-	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	@Autowired
 	private ConfigurableApplicationContext context;
 	@Autowired
@@ -84,12 +79,6 @@ public class AuthApplication {
 
 	@PostConstruct
 	public void init() {
-		// 延迟10秒后执行一次
-		scheduler.schedule(this::check, 10, TimeUnit.SECONDS);
-	}
-
-	@Scheduled(fixedRate = 1, timeUnit = TimeUnit.HOURS)
-	public void check() {
 		boolean license = checkLicense();
 		if (!license) {
 			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
