@@ -13,6 +13,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -71,8 +72,10 @@ public class AuthApplication {
 			}
 			// 如果一致，返回 判断本地 license=true 是否存在
 			return eula;
-		} catch (Exception e) {
-			log.error("Failed to check license: {}", e.getMessage());
+		} catch (IOException e) {
+			log.error("Failed to check the license: {}", e.getMessage());
+		} catch (Throwable e) {
+			log.error("Failed to check the license: {},maybe you can delete the LICENSE file and restart the application.", e.getMessage());
 		}
 		return false;
 	}
