@@ -2,7 +2,6 @@ package cn.watchdog.auth;
 
 import cn.watchdog.core.CaffeineFactory;
 import cn.watchdog.core.service.VariableReplacementService;
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Files;
@@ -18,7 +18,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Component
-public class AuthApplication {
+public class AuthApplication implements SmartLifecycle {
 	@Getter
 	private static Logger log;
 
@@ -32,19 +32,11 @@ public class AuthApplication {
 	}
 
 	private final OkHttpClient client = new OkHttpClient();
+	private boolean running = false;
 	@Autowired
 	private VariableReplacementService variableReplacementService;
 	@Autowired
 	private ApplicationContext applicationContext;
-
-	@PostConstruct
-	public void init() {
-		boolean license = checkLicense();
-		if (!license) {
-			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
-			((ConfigurableApplicationContext) applicationContext).close();
-		}
-	}
 
 	public boolean checkLicense() {
 		String url = "https://raw.githubusercontent.com/xLikeWATCHDOG/resources/main/licenses/LICENSE-COMMON";
@@ -84,5 +76,25 @@ public class AuthApplication {
 			log.error("Failed to check license: {}", e.getMessage());
 		}
 		return false;
+	}
+
+	@Override
+	public void start() {
+		boolean license = checkLicense();
+		if (!license) {
+			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
+			((ConfigurableApplicationContext) applicationContext).close();
+		}
+		running = true;
+	}
+
+	@Override
+	public void stop() {
+		running = false;
+	}
+
+	@Override
+	public boolean isRunning() {
+		return running;
 	}
 }
