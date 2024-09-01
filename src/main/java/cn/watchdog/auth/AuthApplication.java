@@ -83,6 +83,7 @@ public class AuthApplication {
 		if (!license) {
 			log.error("Please read the LICENSE file and set the license=true in the LICENSE file.");
 			SpringApplication.exit(context);
+			System.exit(0);
 		}
 	}
 }
